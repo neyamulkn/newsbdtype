@@ -1,0 +1,171 @@
+.topbar .top-navbar .profile-pic img {
+    width: 30px;
+    border-radius: 100%;
+}
+
+.sidebar-nav ul li.nav-small-cap {
+
+    padding: 10px 14px 14px 0;
+
+}
+.close{
+    color:red;
+}
+
+img.image_info{
+    width: 100%; height: 140px; object-fit: contain;
+}
+
+
+#loading
+{
+    text-align:center; 
+    background: url('../../assets/images/bx_loader.gif') no-repeat center; 
+    height: 100%;
+    width: 100%
+}
+table .custom-switch label{
+    margin: -8px auto;
+}
+.page-titles{
+    margin: 0 -20px 5px !important;
+}
+.container-fluid {
+    padding: 0 5px;
+}
+.card-body {
+    padding: 1rem ;
+    overflow: hidden;
+}
+.table td, .table th {
+    padding: 6px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.divrigth_border::after {
+    content: '';
+    width: 0;
+    height: 100%;
+    margin: -1px 0px;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    margin-left: 0px;
+    border-right: 3px solid #e5e8ec;
+}
+.head-label{
+    position:relative;padding: 15px;
+    border: 1px solid #e1e1e1;
+    margin-bottom: 15px;
+}
+.switch-box{
+    position: absolute;top: -14px;left: 12px;background:#fff;padding: 3px;
+
+}
+
+.status-btn{
+    padding:0px 1px 30px 40px;
+}
+
+input#news_slug{width: 95%;padding-right: 30px;}
+
+span.news_slug{
+    position: absolute;
+    text-align: 0;
+    background: #fff;
+    font-weight: 600;
+    top: 0;
+    color: #9c9797;
+    right: 0;
+    border: 1px solid #e4e4e4;
+    padding: 8px;
+}
+
+/*delete confirm popup*/
+
+
+        .modal-confirm {
+            color: #636363;
+            width: 400px;
+        }
+        .modal-confirm .modal-content {
+            padding: 20px;
+            border-radius: 5px;
+            border: none;
+            text-align: center;
+            font-size: 14px;
+        }
+        .modal-confirm .modal-header {
+            border-bottom: none;
+            position: relative;
+        }
+        .modal-confirm h4 {
+            text-align: center;
+            font-size: 26px;
+        }
+        .modal-confirm .close {
+            position: absolute;
+            top: -5px;
+            right: -2px;
+        }
+        .modal-confirm .modal-body {
+            color: #999;
+        }
+        .modal-confirm .modal-footer {
+            border: none;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 13px;
+            padding: 10px 15px 25px;
+        }
+        .modal-confirm .modal-footer a {
+            color: #999;
+        }
+        .modal-confirm .icon-box {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            border-radius: 50%;
+            z-index: 9;
+            text-align: center;
+            border: 3px solid #f15e5e;
+        }
+        .modal-confirm .icon-box i {
+            color: #f15e5e;
+            font-size: 46px;
+            display: inline-block;
+            margin-top: 13px;
+        }
+        .modal-confirm .btn {
+            color: #fff;
+            border-radius: 4px;
+            background: #60c7c1;
+            text-decoration: none;
+            transition: all 0.4s;
+            line-height: normal;
+            min-width: 120px;
+            border: none;
+            min-height: 40px;
+            border-radius: 3px;
+            margin: 0 5px;
+            outline: none !important;
+        }
+        .modal-confirm .btn-info {
+            background: #c1c1c1;
+        }
+        .modal-confirm .btn-info:hover, .modal-confirm .btn-info:focus {
+            background: #a8a8a8;
+        }
+        .modal-confirm .btn-danger {
+            background: #f15e5e;
+        }
+        .modal-confirm .btn-danger:hover, .modal-confirm .btn-danger:focus {
+            background: #ee3535;
+        }
+        .trigger-btn {
+            display: inline-block;
+            margin: 100px auto;
+        }
+
+/*delete confirm popup*/

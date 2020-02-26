@@ -144,7 +144,7 @@ function banglaDate($date){
 	<section class="block-wrapper">
 		<div class="container section-body" >
 			<div class="row">
-				<div class="col-sm-9 divrigth_border">
+				<div class="col-sm-9 divrigth_border" id="sticky-conent">
                     <div class="advertisement">
                         <div class="desktop-advert">
                             {!! $topOfNews !!}
@@ -386,7 +386,7 @@ function banglaDate($date){
                     </div>
 				</div>
 
-				<div class="col-sm-3">
+				<div class="col-sm-3" id="sticky-conent">
                     <div class="sidebar large-sidebar">
                        
     					 @include('frontend.en.layouts.sitebar')

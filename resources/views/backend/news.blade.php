@@ -154,7 +154,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="datepicker-autoclose" class="control-label">Publish date</label>
-                                                <input name="publish_date" value="{{old('publish_date') ? old('publish_date') : Carbon\Carbon::parse(now())->format('Y-m-d')}}" required id="datepicker-autoclose" type="text" class="form-control">
+                                                <input name="publish_date" value="{{old('publish_date') ? old('publish_date') : Carbon\Carbon::parse(now())->format('Y-m-d h:m:i')}}" required id="datepicker-autoclose" type="text" class="form-control">
                                             </div>
                                         </div>
 

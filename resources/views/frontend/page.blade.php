@@ -31,7 +31,7 @@
 		<section class="ticker-news category">
 			<div class="container">
 				<div class="row">
-					<div class="col-sm-8">
+					<div class="col-sm-8" >
 						<div class="category-title">
 							<span class="breaking-news" id="head-title">@if($find_page) {{$find_page->page_name_bd}} @else Not Found @endif</span>
 						</div>
@@ -49,7 +49,7 @@
 		<section class="block-wrapper">
 			<div class="container section-body">
 				<div class="row">
-					<div class="col-sm-9">
+					<div class="col-sm-9" id="sticky-conent">
 						<ul class="category-news">
 	                        <li><i class="fa fa-home"></i>  হোম / <span href="#">@if($find_page){{$find_page->page_name_bd}} @endif</span></li>
 	                    </ul>
@@ -63,7 +63,7 @@
                         @else
                         <h2>Page not fount!.</h2>
                         @endif
-                        <div class="row">
+                        <div class="row" id="sticky-conent">
                             <div class="col-md-12 col-sm-12">
                                 <div class="advertisement">
                                     <div class="desktop-advert">

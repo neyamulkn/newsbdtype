@@ -129,28 +129,6 @@
                              (adsbygoogle = window.adsbygoogle || []).push({});
                         </script>
                     </div>
-                    <div class="tablet-advert">
-                       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                            <!-- bdtype ads -->
-                            <ins class="adsbygoogle"
-                                 style="display:inline-block;width:728px;height:90px"
-                                 data-ad-client="ca-pub-5013283859692183"
-                                 data-ad-slot="6785753713"></ins>
-                            <script>
-                                 (adsbygoogle = window.adsbygoogle || []).push({});
-                            </script>
-                    </div>
-                    <div class="mobile-advert">
-                        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                            <!-- bdtype ads -->
-                            <ins class="adsbygoogle"
-                                 style="display:inline-block;width:728px;height:90px"
-                                 data-ad-client="ca-pub-5013283859692183"
-                                 data-ad-slot="6785753713"></ins>
-                            <script>
-                                 (adsbygoogle = window.adsbygoogle || []).push({});
-                            </script>
-                    </div>
                 </div>
             </div>
         </div>

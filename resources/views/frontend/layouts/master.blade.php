@@ -1,20 +1,22 @@
 <!doctype html>
 <html lang="en" class="no-js">
 
-<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-	
-    <?php $setting = App\Models\Setting::first(); ?>
-    @if(Request::is('/'))
-        <title>{{ $setting->title }}</title>
-        <meta itemprop="name" content="{{ $setting->title }}">
-    @else
-        <title>@yield('title')</title>
-    @endif
-    <?php header('Set-Cookie: cross-site-cookie=name; SameSite=None; Secure'); ?>
+<?php $setting = App\Models\Setting::first(); ?>
+@if(Request::is('/'))
+    <title>{{ $setting->title }}</title>
+    <meta itemprop="name" content="{{ $setting->title }}">
+@else
+    <title>@yield('title')</title>
+@endif
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    @yield('MetaTag')
+@yield('MetaTag')
+<!--rss -->
+	<link rel="alternate" type="application/rss+xml" title="বিডি টাইপ RSS" href="{{ route('feed') }}" />
     <script type="application/ld+json">
 	{
 	"@context": "https://schema.org",
@@ -57,7 +59,7 @@
 
     {!!  $setting->header_text !!}
 
-    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,400italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,900,400italic' rel='stylesheet' type='text/css'>
 	<link href="{{ asset('frontend/css/font-awesome/font-awesome.min.css') }}" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="{{asset('frontend/css/bootstrap.min.css') }}" media="screen">
 	<link rel="stylesheet" type="text/css" href="{{asset('frontend/css/jquery.bxslider.css') }}" media="screen">

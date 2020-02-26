@@ -72,7 +72,7 @@ function banglaDate($date){
 		<section class="block-wrapper">
 			<div class="container section-body">
 				<div class="row">
-					<div class="col-sm-9">
+					<div class="col-sm-9" id="sticky-conent">
 						<!-- block content -->
 						<div class="block-content">
 							<!-- grid box -->
@@ -173,7 +173,7 @@ function banglaDate($date){
                         </div>
 					</div>
 
-					<div class="col-sm-3">
+					<div class="col-sm-3" id="sticky-conent">
 						<div class="sidebar large-sidebar">
                             <div class="advertisement">
                                 <div class="desktop-advert">

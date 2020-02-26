@@ -69,7 +69,7 @@ function banglaDate($date){
     <section class="block-wrapper">
         <div class="container section-body">
             <div class="row">
-                <div class="col-sm-9">
+                <div class="col-sm-9" id="sticky-conent">
                     @if($subcategory)
                     <ul class="category-news">
                         <li><i class="fa fa-home"></i><a href="{{ route('category', [$category->cat_slug_en]) }}"> {{$category->category_bd}} </a> / <a href="{{ route('category', [$category->cat_slug_en, $subcategory->subcat_slug_en]) }}">{{$subcategory->subcategory_bd}} </a></li>
@@ -3863,7 +3863,7 @@ function banglaDate($date){
 					
                 </div>
 
-                <div class="col-sm-3 div_border">
+                <div class="col-sm-3 div_border" id="sticky-conent">
 					<div class="sidebar large-sidebar">
 	                    <div class="widget features-slide-widget">
 	                        <div class="advertisement">

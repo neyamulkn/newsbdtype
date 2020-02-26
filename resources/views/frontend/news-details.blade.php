@@ -1,17 +1,16 @@
 @extends('frontend.layouts.master')
-@section('title')
-    {{$get_news->news_title}} | {{ ($get_news->subcategory) ? $get_news->subcategoryList->subcategory_bd. " | " : ''}} {{$get_news->categoryList->category_bd}} | বিডি টাইপ
+@section('title'){{$get_news->news_title}} | {{ ($get_news->subcategory) ? $get_news->subcategoryList->subcategory_bd. " | " : ''}} {{$get_news->categoryList->category_bd}} | বিডি টাইপ
 @endsection
 @section('MetaTag')
     <meta name="keywords" content="{{ $get_news->keywords }}" />
     <!-- Schema.org for Google -->
-    <meta itemprop="name" content="{{$get_news->news_title}}">
+    <meta itemprop="name" content="{{$get_news->news_title}} | {{ ($get_news->subcategory) ? $get_news->subcategoryList->subcategory_bd. " | " : ''}} {{$get_news->categoryList->category_bd}} | বিডি টাইপ">
     <meta itemprop="description" content="{{str_limit(strip_tags($get_news->news_dsc), 200)}}">
     <meta itemprop="image" content="@if($get_news->image) {{asset('upload/images/'.$get_news->image->source_path)}} @endif">
 
         <!-- Twitter -->
     <meta name="twitter:card" content="{{str_limit(strip_tags($get_news->news_dsc), 150)}}">
-    <meta name="twitter:title" content="{{$get_news->news_title}}">
+    <meta name="twitter:title" content="{{$get_news->news_title}} | {{ ($get_news->subcategory) ? $get_news->subcategoryList->subcategory_bd. " | " : ''}} {{$get_news->categoryList->category_bd}} | বিডি টাইপ">
     <meta name="twitter:description" content="{{str_limit($get_news->news_dsc, 200)}}">
     <meta name="twitter:site" content="{{url('/')}}">
     <meta name="twitter:creator" content="@Bdtype">
@@ -20,7 +19,7 @@
     <!-- Twitter - Product (e-commerce) -->
 
     <!-- Open Graph general (Facebook, Pinterest & Google+) -->
-    <meta name="og:title" content="{{$get_news->news_title}}">
+    <meta name="og:title" content="{{$get_news->news_title}} | {{ ($get_news->subcategory) ? $get_news->subcategoryList->subcategory_bd. " | " : ''}} {{$get_news->categoryList->category_bd}} | বিডি টাইপ">
     <meta name="og:description" content="{{str_limit(strip_tags($get_news->news_dsc), 100)}}">
     <meta name="og:image" content="@if($get_news->image) {{asset('upload/images/'.$get_news->image->source_path)}} @endif">
      <meta name="og:url" content="{{ url()->full() }}">
@@ -61,10 +60,6 @@
         width: 100% !important;
         height: 1000% !important;
     }
-
-article { position: relative;}
-aside {   position: absolute;width: 94%; }
-aside.fixed {position: fixed; width: 20%}
 
 </style>
 
@@ -154,7 +149,7 @@ function banglaDate($date){
     <section class="block-wrapper">
         <div class="container section-body" >
             <div class="row">
-                <div class="col-sm-9 article divrigth_border">
+                <div class="col-sm-9 article divrigth_border" id="sticky-conent">
                     
                     <!-- block content -->
                     <div class="block-content">
@@ -166,7 +161,7 @@ function banglaDate($date){
                                 <h1>{{$get_news->news_title}}</h1>
                                 <ul class="post-tags">
                                     <li><i class="fa fa-user"></i>by <a href="{{route('reporter_details', $get_news->reporter->username)}}">{{$get_news->reporter->name}}</a></li>
-                                    <li><i class="fa fa-clock-o"></i>{{banglaDate($get_news->publish_date)}} {{Carbon\Carbon::parse($get_news->publish_date)->diffForHumans()}}</li>
+                                    <li><i class="fa fa-calendar" aria-hidden="true"></i>{{banglaDate($get_news->publish_date)}} <i class="fa fa-clock-o"></i> {{Carbon\Carbon::parse($get_news->created_at)->diffForHumans()}}</li>
 
                                     <li><a href="#"><i class="fa fa-comments-o"></i><span>{{$comments->total()}}</span></a></li>
                                     <li><i class="fa fa-eye"></i>{{$get_news->view_counts}}</li>
@@ -348,8 +343,8 @@ function banglaDate($date){
                     </div>
                 </div>
 
-                <div class="col-sm-3">
-                    <aside class="natural">
+                <div class="col-sm-3" id="sticky-conent">
+                    <aside>
                         <div class="sidebar large-sidebar">
                             <div class="advertisement">
                                 <div class="desktop-advert">
@@ -574,27 +569,7 @@ function banglaDate($date){
                 });
             });
         }
-$stick = $('aside');
-$foot = $('footer');
-margin = 25;
-offtop = $stick.offset().top - margin;
-offbtm = $foot.offset().top - ( margin*2 + $stick.height() );
 
-$(window).scroll(function () {
-    scrtop = $(window).scrollTop();
-  if (scrtop > offtop && $stick.hasClass('natural')) {
-    $stick.removeClass('natural').addClass('fixed').css('top', margin);
-  }
-  if (offtop > scrtop && $stick.hasClass('fixed')) {
-    $stick.removeClass('fixed').addClass('natural').css('top', 'auto');
-  }
-  if (scrtop > offbtm && $stick.hasClass('fixed')) {
-    $stick.removeClass('fixed').addClass('bottom').css('top', offbtm+margin);
-  }
-  if (offbtm > scrtop && $stick.hasClass('bottom')) {
-    $stick.removeClass('bottom').addClass('fixed').css('top', margin);
-  }
-});
     </script>
 
 @endsection

@@ -1,8 +1,8 @@
 body {font-size: 15px; font-family: Kiron, SolaimanLipi, Arial, Vrinda, FallbackBengaliFont, Helvetica, sans-serif  !important}
+ #sticky-conent{  position: sticky;
+    position: -webkit-sticky;
+    top: 38px; }
 
-section{
-    overflow: hidden;
-}
 .navbar-nav li:nth-child(1) {
   border-left: 1px solid #ccc !important;
 }

@@ -25,7 +25,7 @@
 		<section class="block-wrapper">
 			<div class="container section-body">
 				<div class="row">
-					<div class="col-sm-9">
+					<div class="col-sm-9" id="sticky-conent">
 						<ul class="category-news">
 	                        <li><i class="fa fa-home"></i>  Home / <span href="#">@if($find_page){{$find_page->page_name_en}} @endif</span></li>
 	                    </ul>
@@ -37,7 +37,7 @@
 					</div>
 
 
-					<div class="col-sm-3 div_border">
+					<div class="col-sm-3 div_border" id="sticky-conent">
 						<div class="sidebar large-sidebar">
 							<!-- sidebar -->
 							 @include('frontend.en.layouts.sitebar')

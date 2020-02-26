@@ -78,7 +78,7 @@
         <section>
             <div class="container">
                 <div class="row">
-                    <div class="col-md-9  section-body divrigth_border">
+                    <div class="col-md-9  section-body divrigth_border" id="sticky-conent">
 
                         <div class="row">
                             <div class="grid-box">
@@ -143,7 +143,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 section-body">
+                    <div class="col-md-3 section-body" id="sticky-conent">
                         <div class="widget features-slide-widget">
                             <ul class="list-posts">
                                 @foreach($sidebar_news_first as $sitebar_first)
@@ -180,7 +180,7 @@
         <section>
             <div class="container">
                 <div class="row">
-                    <div class="col-md-9  section-body divrigth_border">
+                    <div class="col-md-9  section-body divrigth_border" id="sticky-conent">
                         <div class="row">
                             <section class="features-today second-style">
                                 <div class="title-section">
@@ -414,7 +414,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 section-body">
+                    <div class="col-md-3 section-body" id="sticky-conent">
                         <!-- sidebar -->
                         <div class="sidebar large-sidebar">
                             @include('frontend.layouts.sitebar')
@@ -868,7 +868,7 @@
         <section>
             <div class="container section-body">
                 <div class="row">
-                    <div class="col-md-9 divrigth_border">
+                    <div class="col-md-9 divrigth_border" id="sticky-conent">
 
                         <div class="title-section">
                             <h1><span>দেশজুড়ে </span></h1>
@@ -1104,7 +1104,7 @@
                 </div>
             </div>
         </section>
-        <section>
+        <section style="overflow: hidden;">
             <div class="row">
                 <div class="col-md-9">
                     <div class="advertisement">

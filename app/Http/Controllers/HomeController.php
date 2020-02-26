@@ -8,6 +8,7 @@ use App\Models\Page;
 use App\Models\read_later;
 use App\Models\SubCategory;
 use App\Models\Deshjure;
+use App\Models\Setting;
 use App\User;
 use App\Models\Category;
 use Brian2694\Toastr\Facades\Toastr;
@@ -16,6 +17,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Session;
+use Response;
 class HomeController extends Controller
 {
 
@@ -578,6 +580,14 @@ class HomeController extends Controller
     public function error(){
         if(Session::get('locale')){ $folder = 'frontend.en.'; }else{  $folder = 'frontend.'; }
         return view($folder.'404');
+    }
+
+    public function feed(){
+        $setting = Setting::first();
+        $date = date('Y-m-d', strtotime("-79 days"));
+        $get_feeds = News::with(['image:id,source_path','reporter:id,name'])->whereDate('created_at', '>=', $date)->where('status', 1)->orderBy('id', 'DESC')->get();
+        
+        return Response::view('frontend.feed',  ['get_feeds' => $get_feeds])->header('Content-Type', 'text/xml');
     }
 
 }

@@ -73,7 +73,7 @@
         <section>
             <div class="container">
                 <div class="row">
-                    <div class="col-md-9  section-body divrigth_border">
+                    <div class="col-md-9  section-body divrigth_border" id="sticky-conent">
 
                         <div class="row">
                             <div class="grid-box">
@@ -131,7 +131,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 section-body">
+                    <div class="col-md-3 section-body" id="sticky-conent">
                         <div class="widget features-slide-widget">
                             <ul class="list-posts">
                                 @foreach($sidebar_news_first as $sitebar_first)
@@ -161,7 +161,7 @@
         <section>
             <div class="container">
                 <div class="row">
-                    <div class="col-md-9  section-body divrigth_border">
+                    <div class="col-md-9  section-body divrigth_border" id="sticky-conent">
 
 
                         <div class="row">
@@ -404,7 +404,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 section-body">
+                    <div class="col-md-3 section-body" id="sticky-conent">
                         <!-- sidebar -->
                         <div class="sidebar large-sidebar">
                             @include('frontend.en.layouts.sitebar')
@@ -888,7 +888,7 @@
         <section>
             <div class="container section-body">
                 <div class="row">
-                    <div class="col-md-9 divrigth_border">
+                    <div class="col-md-9 divrigth_border" id="sticky-conent">
 
                         <div class="title-section">
                             <h1><span>All over the country </span></h1>
@@ -958,7 +958,7 @@
                             @endforeach
                         </div>
                     </div>
-                    <div class="col-md-3  map">
+                    <div class="col-md-3  map" id="sticky-conent">
                         <div class="title-section">
                             <h1><span>All news in one click</span></h1>
                         </div>

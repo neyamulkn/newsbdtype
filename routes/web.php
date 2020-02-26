@@ -11,6 +11,7 @@
 |
 */
 Route::get('404', 'HomeController@error')->name('404');
+Route::get('/feed', 'HomeController@feed')->name('feed');
 	
 
 //ajax route

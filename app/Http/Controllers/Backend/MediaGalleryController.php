@@ -43,6 +43,23 @@ class MediaGalleryController extends Controller
             $image_resize->save($image_path);
 
 
+            // Add water mark in image
+            $img = Image::make($image->getRealPath());
+            $watermark =  Image::make(public_path('frontend/watermark.png'));
+            $watermarkSize = $img->width() - 20; //size of the image minus 20 margins
+            $watermarkSize = $img->width() / 1; //half of the image size (2 dele half)
+            $resizePercentage = 0;//0% less then an actual image (play with this value)
+            $watermarkSize = round($img->width() * ((100 - $resizePercentage) / 100), 2); //watermark will be $resizePercentage less then the actual width of the image
+            // resize watermark width keep height auto
+            $watermark->resize($watermarkSize, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            //insert resized watermark to image center aligned
+            $img->insert($watermark, 'bottom-center');
+            //overrite image or new name choose
+            $img->save(public_path('upload/images/watermark/'. $image_name));
+
+
             $image_path = public_path('upload/images/thumb_img_box/'.$image_name );
             $image_resize = Image::make($image);
             $image_resize->resize(420, 275);
@@ -86,6 +103,23 @@ class MediaGalleryController extends Controller
                 $image_resize = Image::make($image);
                 $image_resize->resize(200, 115);
                 $image_resize->save($image_path);
+
+                // Add water mark in image
+                $img = Image::make($image->getRealPath());
+                $watermark =  Image::make(public_path('frontend/watermark.png'));
+                $watermarkSize = $img->width() - 20; //size of the image minus 20 margins
+                $watermarkSize = $img->width() / 1; //half of the image size (2 dele half)
+                $resizePercentage = 0;//0% less then an actual image (play with this value)
+                $watermarkSize = round($img->width() * ((100 - $resizePercentage) / 100), 2); //watermark will be $resizePercentage less then the actual width of the image
+                // resize watermark width keep height auto
+                $watermark->resize($watermarkSize, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+                //insert resized watermark to image center aligned
+                $img->insert($watermark, 'bottom-center');
+                //overrite image or new name choose
+                $img->save(public_path('upload/images/watermark/'. $image_name));
+
 
                 $image_path = public_path('upload/images/thumb_img_box/'.$image_name );
                 $image_resize = Image::make($image);

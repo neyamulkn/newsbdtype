@@ -82,14 +82,14 @@
                                               <select class="form-control custom-select" name="date_format" id="date_format" required="required">
                                                     <option value="{{$get_data->date_format}}">{{$get_data->date_format}}</option>
                                                      <option value="Y-m-d">2001-03-15 </option>
-                                                        <option value="d-m-Y">15-03-2020 </option>
-                                                        <option value="d/m/Y">15/03/2020 </option>
-                                                        <option value="m/d/Y">03/15/2020 </option>
-                                                        <option value="m.d.Y">03.10.2020 </option>
-                                                        <option value="j, n, Y">14, 7, 2020 </option>
-                                                        <option value="F j, Y">July 15, 2020 </option>
-                                                        <option value="M j, Y" selected="selected">Jun 13, 2020 </option>
-                                                        <option value="j M, Y">13 Jul, 2020 </option>
+                                                        <option value="d-m-Y">15-06-{{'Y'}} </option>
+                                                        <option value="d/m/Y">15/06/{{'Y'}} </option>
+                                                        <option value="m/d/Y">06/15/{{'Y'}} </option>
+                                                        <option value="m.d.Y">06.15.{{'Y'}} </option>
+                                                        <option value="j, n, Y">15, 06, {{'Y'}} </option>
+                                                        <option value="F j, Y">August 15, {{'Y'}} </option>
+                                                        <option value="M j, Y" selected="selected">Aug 13, {{'Y'}} </option>
+                                                        <option value="j M, Y">13 Aug, {{'Y'}} </option>
                                                 </select>
                                             </div>
                                         </div>

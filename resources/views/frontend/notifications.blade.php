@@ -90,54 +90,67 @@ function banglaDate($date){
                             <!-- forum box -->
                             <div class="forum-box">
                                
-
                                 <div class="forum-table">
-                                    
-                                    <div class="table-row">
-                                        <div class="forum-post">
-                                            <img src="upload/users/avatar7.jpg" alt="">
-                                            <div class="post-autor-date">
-                                                <h2><a href="#">Integer vitae libero ac risus egestas placerat.</a></h2>
-                                                <p>Started by: <a href="#">John</a></p>
-                                                <p>Last Post: <a href="#">Jane</a> - 1 year, 1 month ago</p>
-                                            </div>
-                                        </div>
-                                        <div class="forum-topics">
-                                            <p><span>2</span> Topics</p>
-                                            <p><span>2</span> Posts</p>
-                                        </div>
-                                    </div>
-                                    <div class="table-row">
-                                        <div class="forum-post">
-                                            <img src="upload/users/avatar5.jpg" alt="">
-                                            <div class="post-autor-date">
-                                                <h2><a href="#">Integer vitae libero ac risus egestas placerat.</a></h2>
-                                                <p>Started by: <a href="#">admin</a></p>
-                                                <p>Last Post: <a href="#">admin</a> - 1 year, 1 month ago</p>
-                                            </div>
-                                        </div>
-                                        <div class="forum-topics">
-                                            <p><span>1</span> Topics</p>
-                                            <p><span>1</span> Posts</p>
-                                        </div>
-                                    </div>
-                                    <div class="table-row">
-                                        <div class="forum-post">
-                                            <img src="upload/users/avatar1.jpg" alt="">
-                                            <div class="post-autor-date">
-                                                <h2><a href="#">Vestibulum commodo felis quis tortor.</a></h2>
-                                                <p>Started by: <a href="#">Diana</a></p>
-                                                <p>Last Post: <a href="#">Jane</a> - 1 year, 1 month ago</p>
-                                            </div>
-                                        </div>
-                                        <div class="forum-topics">
-                                            <p><span>2</span> Topics</p>
-                                            <p><span>3</span> Posts</p>
-                                        </div>
-                                    </div>
-                                </div>
+                                    @foreach($notifications as $notification)
+                                        @if($notification->type == env('NEWS'))
+                                        <div class="table-row">
+                                            <div class="forum-post">
+                                                    <img src="{{asset('upload/images/users/thumb_image/'.$notification->user->image)}}">
+                                                   
+                                                    <div class="post-autor-date">
+                                                        <a onclick="readNotify('{{$notification->id}}')" @if($notification->news->status == 1) href="{{route('news.list')}}" @elseif($notification->news->status == 2) href="{{route('news.draft')}}" @else  href="{{route('news.pending')}}" @endif>
 
-                                <p class="line-for-loggin">You must be logged in to create new topics.</p>
+                                                        <strong>{{$notification->notify}} </strong>{{str_limit($notification->news->news_title, 200)}} </a>
+                                                        <p>comment by: <a href="{{route('user_profile', $notification->user->username)}}">{{$notification->user->username}}</a></p>
+                                                        <p><i class="fa fa-clock-o"> </i> {{$notification->created_at->diffForHumans()}} <i class="fa fa-calendar"> </i>    {{$notification->created_at->format('d M, Y')}} </p>
+                                                    </div>
+                                                
+                                            </div>
+                                            
+                                        </div>
+                                        @endif
+
+                                        @if($notification->type == env('COMMENT'))
+                                        <div class="table-row">
+                                            <div class="forum-post">
+                                                    <img src="{{asset('upload/images/users/thumb_image/'.$notification->user->image)}}">
+                                                   
+                                                    <div class="post-autor-date">
+                                                         <a onclick="readNotify('{{$notification->id}}')" href="{{route('comments',$notification->comment->news->news_slug)}}#singleComment{{$notification->item_id}}"><strong>{{$notification->notify}} </strong>{{str_limit($notification->comment->comments, 200)}} </a>
+                                                        <p>comment by: <a href="{{route('user_profile', $notification->user->username)}}">{{$notification->user->username}}</a></p>
+                                                        <p><i class="fa fa-clock-o"> </i> {{$notification->created_at->diffForHumans()}} <i class="fa fa-calendar"> </i>    {{$notification->created_at->format('d M, Y')}} </p>
+                                                    </div>
+                                                
+                                            </div>
+                                            
+                                        </div>
+                                        @endif
+
+                                        @if($notification->type == env('REPORTER_NOTIFY'))
+                                        <div class="table-row">
+                                            <div class="forum-post">
+                                                    <img src="{{asset('upload/images/users/thumb_image/'.$notification->user->image)}}">
+                                                   
+                                                    <div class="post-autor-date">
+                                                        @if(Auth::user()->role_id != env('ADMIN'))
+                                                        <a onclick="readNotify('{{$notification->id}}')" href="{{route('user_profile', $notification->user->username)}}">
+                                                        @endif
+                                                        @if(Auth::user()->role_id == env('ADMIN'))
+                                                        <a onclick="readNotify('{{$notification->id}}')" href="{{route('reporterRequest.list')}}">
+                                                        @endif
+                                                        <strong>{{$notification->notify}} </strong> </a>
+                                                        <p>comment by: <a href="{{route('user_profile', $notification->user->username)}}">{{$notification->user->username}}</a></p>
+                                                        <p><i class="fa fa-clock-o"> </i> {{$notification->created_at->diffForHumans()}} <i class="fa fa-calendar"> </i>    {{$notification->created_at->format('d M, Y')}} </p>
+                                                    </div>
+                                                
+                                            </div>
+                                            
+                                        </div>
+                                        @endif
+                                    @endforeach
+                                     {{$notifications->links()}}
+                                </div>
+                              
 
                             </div>
                             <!-- End forum box -->

@@ -12,7 +12,9 @@
 */
 Route::get('404', 'HomeController@error')->name('404');
 Route::get('/feed', 'HomeController@feed')->name('feed');
-	
+
+Route::get('notifications', 'NotificationController@notifications')->name('notifications');
+Route::get('notifications/read/{id}', 'NotificationController@readNotify')->name('readNotify');
 
 //ajax route
 Route::get('get_subcategoryBy_id/{id}', 'AjaxController@get_subcategoryBy_id')->name('get_subcategory');
@@ -25,6 +27,8 @@ Route::get('get_upzilla/{id}', 'AjaxController@get_upzilla')->name('get_upzilla'
 //deshjure search route  // for home page and sitebar
 Route::get('deshjure_district/{id}', 'AjaxController@deshjure_district')->name('deshjure_district');
 Route::get('deshjure_upzilla/{id}', 'AjaxController@deshjure_upzilla')->name('deshjure_upzilla');
+
+Route::get('news/image/{path}', 'HomeController@watermark')->name('watermark');
 
 
 
@@ -55,7 +59,6 @@ Route::post('registrationAndComment', 'CommentController@registrationAndComment'
 Route::post('userlogin', 'UserController@userlogin')->name('userlogin');
 
 Route::match(['get', 'post'], 'category/{category}/{subcategory?}/{childCategory?}/{subchildCategory?}', ['uses' => 'HomeController@category', 'as' => 'category']);
-Route::get('notifications', 'NotificationController@notifications')->name('notifications');
 
 Route::get('news/search', 'HomeController@search_news')->name('search_news');
 Route::get('search', 'HomeController@search_result')->name('search_result');
@@ -74,6 +77,9 @@ Route::get('news/read-later/{username}', 'UserController@viewReadLater')->name('
 Route::get('comment/insert', 'CommentController@comment_insert')->name('comment_insert');
 Route::post('comment/reply/{id}', 'CommentController@comment_reply')->name('comment_reply');
 Route::get('comments/{slug}', 'CommentController@comments')->name('comments');
+
+Route::get('comment/delete', 'CommentController@commentDelete')->name('commentDelete');
+
 
 
 Route::get('{page}', 'HomeController@page')->name('page');

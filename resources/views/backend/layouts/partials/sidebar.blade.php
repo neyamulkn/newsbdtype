@@ -91,10 +91,15 @@
                         <li><a href="#">Poll List</a></li>
                     </ul>
                 </li>
-                <li> <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-email"></i><span class="hide-menu">Subscription<span class="badge badge-pill badge-primary text-white ml-auto">25</span></span></a>
+                <li> <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-email"></i><span class="hide-menu">Subscription</span></a>
                     <ul aria-expanded="false" class="collapse">
                         <li><a href="#">Add Subscription</a></li>
                         <li><a href="#">Subscription List</a></li>
+                    </ul>
+                </li>
+                <li> <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-comment"></i><span class="hide-menu">Comments</span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li><a href="{{route('allComments')}}">Comments</a></li>
                     </ul>
                 </li>
                 <li> <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i><span class="hide-menu">Setting</span></a>
@@ -103,7 +108,11 @@
                     </ul>
                 </li>
             @endif
-
+                <li> <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-bell"></i><span class="hide-menu">Notifications</span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li><a href="{{route('notifications')}}">Notifications</a></li>
+                    </ul>
+                </li>
                 <li> <a class="waves-effect waves-dark" href="{{ route('logout') }}" onclick="event.preventDefault();
                      document.getElementById('logout-form').submit();" aria-expanded="false"><i class="far fa-circle text-success"></i><span class="hide-menu">Log Out</span></a>
                  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

@@ -126,22 +126,22 @@ function banglaDate($date){
                         <div class="grid-box">
                             <div class="row">
 
-                                    @foreach($categories as $category)
+                                    @foreach($categories as $news)
                                         @if(Request::get('page') <= 1)
                                             @if($i==1)
                                                 <div class="col-md-6 col-sm-6" >
                                                     <div class="news-post standard-post2">
                                                         <div class="post-gallery">
-                                                            <img src="{{ asset('upload/images/'. $category->image->source_path)}}" alt="">
-                                                            @if($category->type == 3)
-                                                                <a class="play-link" href="{{route('news_details', $category->news_slug)}}"><i class="fa fa-play-circle-o"></i></a>
-                                                            @elseif($category->type == 4)
-                                                                <a class="play-link" href="{{route('news_details', $category->news_slug)}}"><i class="fa fa-headphones" aria-hidden="true"></i></a>
+                                                            <img src="{{ asset('upload/images/'. $news->image->source_path)}}" alt="">
+                                                            @if($news->type == 3)
+                                                                <a class="play-link" href="{{route('news_details', $news->news_slug)}}"><i class="fa fa-play-circle-o"></i></a>
+                                                            @elseif($news->type == 4)
+                                                                <a class="play-link" href="{{route('news_details', $news->news_slug)}}"><i class="fa fa-headphones" aria-hidden="true"></i></a>
                                                             @else @endif
                                                         </div>
                                                         <div class="post-title box_title">
-                                                            <h2><a href="{{route('news_details', $category->news_slug)}}">{{str_limit($category->news_title, 70)}} </a></h2>
-                                                            <span>{!!str_limit(strip_tags($category->news_dsc), 150)!!}</span>
+                                                            <h2><a href="{{route('news_details', $news->news_slug)}}">{{str_limit($news->news_title, 70)}} </a></h2>
+                                                            <span>{!!str_limit(strip_tags($news->news_dsc), 150)!!}</span>
 
                                                         </div>
                                                     </div>
@@ -150,15 +150,15 @@ function banglaDate($date){
                                                 <div class="col-md-3 col-xs-6 col-sm-3">
                                                     <div class="news-post standard-post2">
                                                         <div class="post-gallery">
-                                                            <img src="{{ asset('upload/images/thumb_img/'. $category->image->source_path)}}" alt="">
-                                                            @if($category->type == 3)
-                                                                <a class="play-link" href="{{route('news_details', $category->news_slug)}}"><i class="fa fa-play-circle-o"></i></a>
-                                                            @elseif($category->type == 4)
-                                                                <a class="play-link" href="{{route('news_details', $category->news_slug)}}"><i class="fa fa-headphones" aria-hidden="true"></i></a>
+                                                            <img src="{{ asset('upload/images/thumb_img/'. $news->image->source_path)}}" alt="">
+                                                            @if($news->type == 3)
+                                                                <a class="play-link" href="{{route('news_details', $news->news_slug)}}"><i class="fa fa-play-circle-o"></i></a>
+                                                            @elseif($news->type == 4)
+                                                                <a class="play-link" href="{{route('news_details', $news->news_slug)}}"><i class="fa fa-headphones" aria-hidden="true"></i></a>
                                                             @else @endif
                                                         </div>
                                                         <div class="post-title">
-                                                            <h2><a href="{{route('news_details', $category->news_slug)}}">{{str_limit($category->news_title, 40)}} </a></h2>
+                                                            <h2><a href="{{route('news_details', $news->news_slug)}}">{{str_limit($news->news_title, 40)}} </a></h2>
                                                             <ul class="post-tags">
 
                                                                 <li>
@@ -166,7 +166,7 @@ function banglaDate($date){
                                                                      @if($subchild_cat) {{ $subchild_cat->name_bd }} @elseif($child_cat) {{ $child_cat->name_bd }} @elseif($subcategory) {{ $subcategory->subcategory_bd}} @else  {{$category->category_bd}} @endif
                                                                 </li>
 
-                                                                <li><i class="fa fa-clock-o"></i>{{banglaDate($category->publish_date)}}</li>
+                                                                <li><i class="fa fa-clock-o"></i>{{banglaDate($news->publish_date)}}</li>
                                                             </ul>
                                                         </div>
                                                     </div>
@@ -186,19 +186,20 @@ function banglaDate($date){
                                             <div class="col-md-3 col-xs-6 col-sm-3">
                                                 <div class="news-post standard-post2">
                                                     <div class="post-gallery">
-                                                        <img src="{{ asset('upload/images/thumb_img/'. $category->image->source_path)}}" alt="">
-                                                        @if($category->type == 3)
-                                                            <a class="play-link" href="{{route('news_details', $category->news_slug)}}"><i class="fa fa-play-circle-o"></i></a>
-                                                        @elseif($category->type == 4)
-                                                            <a class="play-link" href="{{route('news_details', $category->news_slug)}}"><i class="fa fa-headphones" aria-hidden="true"></i></a>
+                                                        <img src="{{ asset('upload/images/thumb_img/'. $news->image->source_path)}}" alt="">
+                                                        @if($news->type == 3)
+                                                            <a class="play-link" href="{{route('news_details', $news->news_slug)}}"><i class="fa fa-play-circle-o"></i></a>
+                                                        @elseif($news->type == 4)
+                                                            <a class="play-link" href="{{route('news_details', $news->news_slug)}}"><i class="fa fa-headphones" aria-hidden="true"></i></a>
                                                         @else @endif
                                                     </div>
                                                     <div class="post-title">
-                                                        <h2><a href="{{route('news_details', $category->news_slug)}}">{{str_limit($category->news_title, 40)}} </a></h2>
+                                                        <h2><a href="{{route('news_details', $news->news_slug)}}">{{str_limit($news->news_title, 40)}} </a></h2>
                                                         <ul class="post-tags">
-                                                            <li> @if($category->subcategoryList)
-                                                                <i class="fa fa-tags"></i>{{$category->subcategoryList->subcategory_bd}}@endif</li>
-                                                            <li><i class="fa fa-clock-o"></i>{{banglaDate($category->publish_date)}}</li>
+                                                            <li><i class="fa fa-tags"></i>
+                                                                     @if($subchild_cat) {{ $subchild_cat->name_bd }} @elseif($child_cat) {{ $child_cat->name_bd }} @elseif($subcategory) {{ $subcategory->subcategory_bd}} @else  {{$category->category_bd}} @endif
+                                                                </li>
+                                                            <li><i class="fa fa-clock-o"></i>{{banglaDate($news->publish_date)}}</li>
                                                         </ul>
                                                     </div>
                                                 </div>

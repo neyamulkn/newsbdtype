@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Session;
 use Response;
+use Intervention\Image\Facades\Image;
 class HomeController extends Controller
 {
 
@@ -399,6 +400,7 @@ class HomeController extends Controller
         $data['get_news'] = News::with(['image','reporter'])->where('news_slug', $slug)->where('status', 1)->first();
         
         if($data['get_news']){
+        
             $lang = 1;
             if($data['get_news']->lang == 2){
                 $lang = 2;
@@ -424,6 +426,12 @@ class HomeController extends Controller
         }else{
             return view('frontend.404');
         }
+    }
+
+    //use jquery plugin not work proper
+    public function watermark($path){
+
+        return view('frontend/watermark')->with(compact('path'));
     }
 
     public function page($url){

@@ -148,7 +148,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth', 'namespace' => 'B
         Route::get('delete/{id}', 'SettingController@setting_delete')->name('delete');
     });
 
-
+    Route::get('comment/list', 'CommentController@allComments')->name('allComments');
+	Route::post('comment/update', 'CommentController@commentUpdate')->name('commentUpdate');
 
 });
 

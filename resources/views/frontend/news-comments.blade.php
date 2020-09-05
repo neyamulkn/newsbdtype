@@ -50,6 +50,8 @@
     .reply-box{
         width:100%;resize: vertical;
     }
+    .comment-content a{cursor: pointer;font-size: 12px;}
+
 
 </style>
 
@@ -170,19 +172,39 @@ function banglaDate($date){
                                     </h1>
                                 </div>
                                 
-                                <ul class="comment-tree" id="show_comment">
+                               <ul class="comment-tree" id="show_comment">
                                     @if(count($comments)>0)
                                         <?php $i = 1; ?>
                                         @foreach($comments as $comment)
-                                        <li  style="background: #f7f7f7">
+                                        <li id="singleComment{{ $comment->id }}" style="background: #f7f7f7">
                                             <div class="comment-box">
                                                 <a href="{{route('user_profile', [$comment->user->username])}}">
                                                 <img alt="" src="{{ asset('upload/images/users/thumb_image/'.$comment->user->image) }}"></a>
                                                 <div class="comment-content">
-                                                    <h4><a style="float: left;border:none;" href="{{route('user_profile', [$comment->user->username])}}">{{$comment->user->name}}</a> <a @guest class="log-in-popup" href="#log-in-popup" @else onclick="reply_field('{{$comment->id}}')"  @endguest style="cursor: pointer;" ><i class="fa fa-comment-o"></i>Reply</a></h4>
+                                                    <h4><a style="float: left;border:none;" href="{{route('user_profile', [$comment->user->username])}}">{{$comment->user->name}}</a> <a @guest class="log-in-popup" href="#log-in-popup" @else onclick="reply_field('{{$comment->id}}', 'reply_form')"  @endguest style="cursor: pointer;" ><i class="fa fa-comment-o"></i>Reply</a></h4>
                                                     <span><i class="fa fa-clock-o"></i>{{Carbon\Carbon::parse($comment->created_at)->diffForHumans()}}</span>
-                                                    <p>{{$comment->comments}}</p>
+                                                    <p id="comment{{$comment->id}}">{{$comment->comments}}</p>
+                                                    @if(Auth::check())
+                                                        @if($comment->user_id == Auth::user()->id)
+                                                            <a onclick="comment_edit('{{$comment->id}}')" class="comment-control">Edit</a> 
+                                                            <a onclick="commentDelete('{{$comment->id}}')" class="comment-control">Delete</a>
+                                                            
+                                                        @endif
+                                                        <a class="comment-control" onclick="reply_field('{{$comment->id}}', 'reply_form')" >Reply</a>
+                                                        <!-- comment_edit form-->
+                                                        <form method="get" action="{{route('comment_insert')}}" id="update_comment{{$comment->id}}" class="comment-reply-form">
+                                                            <input type="hidden" value="{{$comment->id}}" name="id">
+                                                             <input type="hidden" name="news_id" value="{{ $get_news->id }}">
+                                                            <div id="comment_edit{{$comment->id}}"></div>
+                                                        </form>
+                                                    @endif
                                                 </div>
+
+                                            <form method="post" style="padding-top: 10px;" action="{{route('comment_reply', $comment->id)}}" id="reply_form{{$comment->id}}" class="comment-reply-form">
+                                            
+                                            </form>
+                                       
+
                                             </div>
                                            <!--  Reply comments -->
                                             <ul class="depth" id="show_replyComment{{$comment->id}}">
@@ -190,14 +212,33 @@ function banglaDate($date){
                                                 <?php  $replyComments = App\Models\Comment::where('comment_id', $comment->id)->get(); ?>
                                                 @if($replyComments)
                                                     @foreach($replyComments as $replyComment)
-                                                        <li  style="background: #fff;">
+                                                        <li id="singleComment{{ $replyComment->id }}" style="background: #fff;">
                                                             <div class="comment-box" style="margin: 0px;">
                                                                 <a  href="{{route('user_profile', [$replyComment->user->username])}}"><img alt="" src="{{asset('upload/images/users/thumb_image/'.$replyComment->user->image)}}"></a>
                                                                 <div class="comment-content">
                                                                     <h4><a style="float: left; border:none;" href="{{route('user_profile', [$replyComment->user->username])}}">{{$replyComment->user->name}} </a></h4>
                                                                     <span><i class="fa fa-clock-o"></i>{{ Carbon\Carbon::parse($replyComment->created_at)->diffForHumans()}}</span>
-                                                                    <p>{{$replyComment->comments}}</p>
+                                                                    <p id="reply_comment{{$replyComment->id}}">{{$replyComment->comments}}</p>
+
+                                                                    <!-- update comment reply -->
+                                                                    @if(Auth::check())
+                                                                        @if($replyComment->user_id == Auth::user()->id)
+                                                                            <a onclick="reply_comment_edit('{{$comment->id}}','{{$replyComment->id}}')" class="comment-control">Edit</a> 
+                                                                            <a  onclick="commentDelete('{{$replyComment->id}}')" class="comment-control">Delete</a>
+                                                                        @endif
+                                                                        <a onclick="reply_field('{{$comment->id}}', 'reply_form', '{{$replyComment->id}}')" >Reply</a>
+
+                                                                        <!-- show reply edit comment form -->
+                                                                        <form method="post" action="{{route('comment_reply', $replyComment->id)}}" id="update_replyComment{{$replyComment->id}}" class="comment-reply-form">
+                                                                        
+                                                                        </form>
+                                                                    @endif
+                                                    <!-- end comment reply update -->
                                                                 </div>
+
+                                                                <form method="post" style="padding-top: 10px;" action="{{route('comment_reply', $comment->id)}}" id="reply_form{{$comment->id.$replyComment->id}}" class="comment-reply-form">
+                                            
+                                                                </form>
                                                             </div>
                                                         </li>
                                                         <?php $i++; ?>
@@ -205,14 +246,7 @@ function banglaDate($date){
                                                 @endif
                                             </ul>
                                         </li>
-                                        <li><!-- COMMENT REPLY FORM -->
-                                            <form style="display: none;" method="post" action="{{route('comment_reply', $comment->id)}}" id="reply_form{{$comment->id}}" class="comment-reply-form">
-                                                @csrf 
-                                                <input type="hidden" name="news_id" value="{{$comment->news_id}}">
-                                                <textarea name="reply_comment" class="reply-box" rows="1" required  placeholder="মন্তব্য লেখুন.."></textarea><button onclick="reply('{{$comment->id}}')" class="btn btn-primary btn-sm" type="submit" >Reply</button>
-                                            </form>
-                                            <!-- /COMMENT REPLY FORM -->
-                                        </li>
+                                        
                                         
                                         @endforeach
                                        
@@ -220,7 +254,8 @@ function banglaDate($date){
                                 </ul>
                                
                             </div>
-                           
+                            {{$comments->appends(request()->query())->links()}}
+
                             <!-- End comment area box -->
                             
                             <!-- contact form box -->
@@ -310,7 +345,8 @@ function banglaDate($date){
 @endsection
 
 @section('js')
-<!-- Contents of log in popup-->
+
+    <!-- Contents of log in popup-->
     <div id="log-in-popup" class="mfp-hide white-popup">
         <form action="{{ route('userlogin') }}" method="post" class="login-form">
             <div class="">
@@ -357,7 +393,7 @@ function banglaDate($date){
         </form>
         <form action="{{ route('registrationAndComment') }}" method="post" class="register-form">
             
-            <h4>মন্তব্য করতে নিবন্ধন করুন </h42>
+            <h4>মন্তব্য করতে নিবন্ধন করুন </h4>
             <hr/>
             
             @csrf
@@ -410,7 +446,8 @@ function banglaDate($date){
             <p class="login-line">Back to <a href="#">Login</a></p>
         </form>
     </div>
-    <script src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+
+    <script src="{{ asset('backend/dist/js/toastr.js') }}"></script>
 
     {!! Toastr::message() !!}
     <script>
@@ -422,10 +459,22 @@ function banglaDate($date){
         @endif
 
         @if(Session::get('submitType'))
-         $("#loginModal").modal('show');
+         $("#log-in-popup").click();
         @endif
     </script>
         <script type="text/javascript">
+
+            function readLater(news_id){
+
+                $.ajax({
+                    url:'{{route("readLater")}}',
+                    type:'GET',
+                    data:{news_id:news_id},
+                    success:function(response){
+                       toastr.success(response);
+                    }
+                });
+            }
 
             $('#linkIncrease').click(function () {
                 modifyFontSize('increase');
@@ -445,7 +494,7 @@ function banglaDate($date){
                 if (flag == 'increase')
                     currentFontSize += 2;
                 else if (flag == 'decrease')
-	                currentFontSize -= 2;
+                    currentFontSize -= 2;
                 else
                     currentFontSize = 16;
                 divElement.css('font-size', currentFontSize);
@@ -465,35 +514,113 @@ function banglaDate($date){
                         success:function(result){
                             document.getElementById("comment").reset();
                             $("#show_comment").append(result);
-
+                             toastr.success('Comment inserted.');
                         }
 
                 });
             });
         });  
 
-        function reply_field(id){
-            document.getElementById('reply_form'+id).style.display = 'block';
-        }      
+        function reply_field(com_id, type, id=''){
+            //when click reply btn hide edit from 
+            $("#comment_edit"+com_id).html('');
+            $("#update_replyComment"+id).html('');
 
-            /// replay comment
-     function reply(id){
-            $("#reply_form"+id).submit(function(event){
-                event.preventDefault();
-                var link = '{{route("comment_reply", ":id")}}';
-                var link = link.replace(':id', id);
-                $.ajax({
-                    url:link,
-                    type:'post',
+            document.getElementById(type+com_id+id).innerHTML = '@csrf  <input type="hidden" name="news_id" value="{{ $get_news->id }}"> <textarea name="reply_comment" class="reply-box" rows="1" required  placeholder="মন্তব্য লেখুন.."></textarea><button  onclick="replyformSubmit('+com_id+', \''+type+'\', '+id+')"  type="submit"  style="float: right;">Reply</button>'
+        }  
+
+    function comment_edit(id){
+        //when click edit btn hide reply from 
+        $("#reply_form"+id).html('');
+        var comment = document.getElementById('comment'+id).innerHTML;
+
+        document.getElementById("comment_edit"+id).innerHTML = '<input name="com_id" type="hidden" id="commentId'+id+'" value="'+id+'">  <input type="hidden" name="news_id" value="{{ $get_news->id }}"><textarea class="reply-box" id="commentMsg'+id+'" name="comment" required placeholder="Write your comment here...">'+comment+'</textarea><button onclick="formSubmit('+id+')" type="submit" style="float: right;">Update</button>';
+    }
+
+    function reply_comment_edit(com_id, id){
+        $("#reply_form"+com_id+id).html('');
+        var reply_comment = document.getElementById('reply_comment'+id).innerHTML;
+    
+        document.getElementById("update_replyComment"+id).innerHTML = '@csrf <input type="hidden" name="reply_id" value="'+id+'" > <input type="hidden" name="news_id" value="{{ $get_news->id }}"> <textarea class="reply-box"  name="reply_comment" required placeholder="Write your comment here...">'+reply_comment+'</textarea><button type="submit"  onclick="replyformSubmit('+id+', \'update_replyComment\')"  style="float: right;">update</button>';
+    }
+
+    //udpate comment
+    function formSubmit(id){
+
+        $("#update_comment"+id).submit(function(event){
+            event.preventDefault();
+           
+            $.ajax({
+                    url:'{{route("comment_insert")}}',
+                    type:'GET',
                     data:$(this).serialize(),
                     success:function(result){
-                        document.getElementById("reply_form"+id).reset();
-                        $("#show_replyComment"+id).append(result);
-
+                        $("#comment"+id).html(result);
+                        $("#comment_edit"+id).html('');
+                         toastr.success('Comment updated');
                     }
-                });
+
             });
+        });
+    }   
+
+    /// replay comment
+
+    function replyformSubmit(id, type, com_id=''){
+
+        $("#"+type+id+com_id).submit(function(event){
+            event.preventDefault();
+            var link = '{{route("comment_reply", ":id")}}';
+            link = link.replace(':id', id);
+
+            $.ajax({
+                    url:link,
+                    type:'POST',
+                    data:$(this).serialize(),
+                    success:function(result){
+                        if(type == 'reply_form'){
+                            //for insert 
+                            $("#show_replyComment"+id).append(result);
+                            $("#"+type+id+com_id).html('');
+                             toastr.success('Comment inserted.');
+                        }
+                        if(type == 'update_replyComment'){
+                            //for update
+                            $("#reply_comment"+id).html(result);
+                            $("#update_replyComment"+id).html('');
+                             toastr.success('Comment updated.');
+                        }
+                      
+                    }
+
+            });
+        });
+    }
+
+
+        //comment delete
+    function commentDelete(com_id){
+        if(confirm("Are you sure delete comment")){
+            $.ajax({
+                method:'get',
+                url:"{{route('commentDelete')}}",
+                data:{com_id:com_id},
+                success:function(data){
+                    
+                    if(data.status == 'success'){
+
+                        $('#singleComment'+com_id).hide();
+                        toastr.success(data.msg);
+                    }else{
+                        toastr.error(data.msg);
+                    }
+                }
+            });
+        }else{
+            return false;
         }
+
+    }
 
     </script>
 

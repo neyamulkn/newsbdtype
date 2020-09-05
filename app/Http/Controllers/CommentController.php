@@ -21,28 +21,29 @@ class CommentController extends Controller
         $data = [
             'news_id' => $request->news_id,
             'user_id' => $user_id,
-            'comments' =>$request->comment,
+            'comments' => $request->comment,
             'type' => 1,
         ];
 
-        $insert = Comment::create($data);
+        $comment = Comment::updateOrCreate(['user_id' => Auth::user()->id, 'id' => $request->id], $data);
 
-        if($insert){
+        if($comment){
             $author = News::find($request->news_id);
-            $notify = [
-                'fromUser' => $user_id,
-                'toUser' => $author->user_id,
-                'type' => env('REPORTER_NOTIFY'),
-                'item_id' => $request->news_id,
-                'notify' => 'comment on your news',
-            ];
-            Notification::create($notify);
-            echo '<li><div class="comment-box"><img alt="" src="'.asset('upload/images/users/thumb_image/'.$insert->user->image).'">
-            <div class="comment-content">
-                <h4>'.$insert->user->name.'<a href="#"><i class="fa fa-comment-o"></i>Reply</a></h4>
-                <span><i class="fa fa-clock-o"></i>'. \Carbon\Carbon::parse($insert->created_at)->diffForHumans().'</span>
-                <p>'. $insert->comments.' </p>
-            </div></div></li>';
+            if($author->user_id != $user_id){
+                $notify = [
+                    'fromUser' => $user_id,
+                    'toUser' => $author->user_id,
+                    'type' => env('COMMENT'),
+                    'item_id' => $comment->id,
+                    'notify' => 'comment on your news',
+                ];
+                Notification::create($notify);
+            }
+            if(!$request->id){
+                   echo view('frontend.show_comment')->with(compact('comment'));
+            }else{
+                echo $request->comment;
+            }
         }
     }
 
@@ -104,8 +105,8 @@ class CommentController extends Controller
                     $notify = [
                         'fromUser' => $user_id,
                         'toUser' => $author->user_id,
-                        'type' => env('REPORTER_NOTIFY')
-  ,                      'item_id' => $request->news_id,
+                        'type' => env('COMMENT')
+  ,                      'item_id' => $insert->id,
                         'notify' => 'comment on your news',
                     ];
                 }
@@ -123,6 +124,56 @@ class CommentController extends Controller
     public function comment_reply(Request $request, $comment_id)
     {
 
+
+        $request->validate([
+            'reply_comment' => ['required']
+        ]);
+
+
+        $user_id = Auth::user()->id;
+
+        if($request->reply_id){
+            Comment::where('user_id', Auth::user()->id)->where('id', $request->reply_id)->update(['comments' => $request->reply_comment]);
+            echo $request->reply_comment;
+        }else{
+
+            $data = [
+                'news_id' => $request->news_id,
+                'user_id' => $user_id,
+                'comments' => $request->reply_comment,
+                'comment_id' => $comment_id,
+                'type' => 2,
+            ];
+
+            $replyComment = Comment::create($data);
+
+            if($replyComment){
+                $toUser = Comment::find($comment_id);
+                // check comment author reply
+                if($toUser->user_id !=$user_id){
+                    $notify = [
+                        'fromUser' => $user_id,
+                        'toUser' => $toUser->user_id,
+                        'type' => env('COMMENT'),
+                        'item_id' => $replyComment->id,
+                        'notify' => 'reply on your comment',
+                    ];
+                    Notification::create($notify);
+                }
+                echo view('frontend.show_reply_comment')->with(compact('replyComment'));
+                
+            }
+        }
+    }
+
+    public function comment_reply_update(Request $request, $comment_id)
+    {
+
+        $request->validate([
+            'reply_comment' => ['required']
+        ]);
+
+
         $user_id = Auth::user()->id;
         $data = [
             'news_id' => $request->news_id,
@@ -132,9 +183,9 @@ class CommentController extends Controller
             'type' => 2,
         ];
 
-        $insert = Comment::create($data);
+        $replyComment = Comment::updateOrCreate(['news_id' => $request->news_id, 'user_id' => Auth::user()->id, 'id' => $request->id], $data);
 
-        if($insert){
+        if($replyComment){
             $toUser = Comment::find($comment_id);
             $notify = [
                 'fromUser' => $user_id,
@@ -145,19 +196,18 @@ class CommentController extends Controller
             ];
             Notification::create($notify);
 
-             echo '<li><div class="comment-box"><img alt="" src="'.asset('upload/images/users/thumb_image/'.$insert->user->image).'">
-            <div class="comment-content">
-                <h4>'.$insert->user->name.'</h4>
-                <span><i class="fa fa-clock-o"></i>'. \Carbon\Carbon::parse($insert->created_at)->diffForHumans().'</span>
-                <p>'. $insert->comments.' </p>
-            </div></div></li>';
+            if(!$request->update){
+                echo view('frontend.show_reply_comment')->with(compact('replyComment'));
+            }else{
+                echo $request->reply_comment;
+            }
         }
     }
 
     public function comments($slug){
         $data['get_news'] = News::where('news_slug', $slug)->first();
         if($data['get_news']){
-            $data['comments'] = Comment::where('news_id', $data['get_news']->id)->where('type', 1)->get();
+            $data['comments'] = Comment::where('news_id', $data['get_news']->id)->where('type', 1)->paginate(25);
 
             $data['more_news'] =News::with(['categoryList', 'subcategoryList', 'image'])
                 ->where('news.id', '!=', $data['get_news']->id)
@@ -169,6 +219,31 @@ class CommentController extends Controller
             return view('frontend.404');
         }
 
+    }
+
+    public function commentDelete(Request $request){
+       
+        $delete = Comment::where(function($query){
+            if(Auth::user()->role_id != env('ADMIN')){
+                $query->where('user_id', Auth::user()->id);
+            }
+        })->where('id', $request->com_id)->first();
+        if($delete){
+            Comment::where('comment_id', $request->com_id)->delete();
+            Notification::where('item_id', $delete->id)->where('fromUser', $delete->user_id)->delete();
+            $delete->delete();
+            $output = array(
+             'status' => 'success',
+             'msg'  => 'Comment deleted'
+            );
+        }else{
+            $output = array(
+             'status' => 'error',
+             'msg'  => 'Sorry something is wrong try again.'
+            );
+        }
+        
+        return response()->json($output);
     }
 
     public function createSlug($slug)

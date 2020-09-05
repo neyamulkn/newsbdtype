@@ -44,66 +44,78 @@
             <!-- ============================================================== -->
             <ul class="navbar-nav my-lg-0">
                 <!-- ============================================================== -->
-                <!-- Comment -->
-                <!-- ============================================================== -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="ti-email"></i>
-                        <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown">
-                        <ul>
-                            <li>
-                                <div class="drop-title">Notifications</div>
-                            </li>
-                            <li>
-                                <div class="message-center">
-                                    <!-- Message -->
-                                    <a href="javascript:void(0)">
-                                        <div class="btn btn-danger btn-circle"><i class="fa fa-link"></i></div>
-                                        <div class="mail-contnet">
-                                            <h5>Luanch Admin</h5> <span class="mail-desc">Just see the my new admin!</span> <span class="time">9:30 AM</span> </div>
-                                    </a>
-                                    <!-- Message -->
-                                    <a href="javascript:void(0)">
-                                        <div class="btn btn-success btn-circle"><i class="ti-calendar"></i></div>
-                                        <div class="mail-contnet">
-                                            <h5>Event today</h5> <span class="mail-desc">Just a reminder that you have event</span> <span class="time">9:10 AM</span> </div>
-                                    </a>
-                                    <!-- Message -->
-                                    <a href="javascript:void(0)">
-                                        <div class="btn btn-info btn-circle"><i class="ti-settings"></i></div>
-                                        <div class="mail-contnet">
-                                            <h5>Settings</h5> <span class="mail-desc">You can customize this template as you want</span> <span class="time">9:08 AM</span> </div>
-                                    </a>
-                                    <!-- Message -->
-                                    <a href="javascript:void(0)">
-                                        <div class="btn btn-primary btn-circle"><i class="ti-user"></i></div>
-                                        <div class="mail-contnet">
-                                            <h5>Pavan kumar</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:02 AM</span> </div>
-                                    </a>
-                                </div>
-                            </li>
-                            <li>
-                                <a class="nav-link text-center link" href="javascript:void(0);"> <strong>Check all notifications</strong> <i class="fa fa-angle-right"></i> </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <!-- ============================================================== -->
-                <!-- End Comment -->
-                <!-- ============================================================== -->
-                <!-- ============================================================== -->
+         
                 <!-- Messages -->
                 <!-- ============================================================== -->
+                <?php $notifications = App\Models\Notification::where('toUser', Auth::id())->orderBy('id', 'desc')->get(); ?>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" id="2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="icon-bell"></i>
+                        @if(count($notifications->where('read', 0))>0)
+                        <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
+                        @endif
+                    </a>
+                    @if(count($notifications)>0)
+                    <div class="dropdown-menu mailbox dropdown-menu-right animated bounceInDown" aria-labelledby="2">
+                        <ul>
+                            
+                            <li>
+                                <div class="message-center">
+                                     @foreach($notifications->take(7) as $notification)
+
+                                        @if($notification->type == env('NEWS'))
+                                           
+                                            <a onclick="readNotify('{{$notification->id}}')" @if($notification->news->status == 1) href="{{route('news.list')}}" @elseif($notification->news->status == 2) href="{{route('news.draft')}}" @else  href="{{route('news.pending')}}" @endif>
+                                                <div class="user-img"> <img src="{{asset('upload/images/users/thumb_image/'.$notification->user->image)}}" alt="user" class="img-circle"></div>
+                                                <div class="mail-contnet">
+                                                    <h5>{{$notification->user->username}}</h5> <span class="mail-desc"><strong>{{$notification->notify}} </strong> - {{str_limit($notification->news->news_title, 20)}}</span> <span class="time">{{$notification->created_at->diffForHumans()}}</span>
+                                                </div>
+                                            </a>
+                                        @endif
+
+                                        @if($notification->type == env('COMMENT'))
+                                           
+                                            <a onclick="readNotify('{{$notification->id}}')"  href="{{route('comments',$notification->comment->news->news_slug)}}#singleComment{{$notification->item_id}}">
+                                                <div class="user-img"> <img src="{{asset('upload/images/users/thumb_image/'.$notification->user->image)}}" alt="user" class="img-circle"></div>
+                                                <div class="mail-contnet">
+                                                    <h5>{{$notification->user->username}}</h5> <span class="mail-desc"><strong>{{$notification->notify}} </strong> - {{str_limit($notification->comment->comments, 20)}}</span> <span class="time">{{$notification->created_at->diffForHumans()}}</span> </div>
+                                            </a>
+                                        @endif
+
+                                        @if($notification->type == env('REPORTER_NOTIFY'))
+                                           
+                                                @if(Auth::user()->role_id != env('ADMIN'))
+                                                <a onclick="readNotify('{{$notification->id}}')" href="{{route('user_profile', $notification->user->username)}}">
+                                                @endif
+                                                @if(Auth::user()->role_id == env('ADMIN'))
+                                                <a onclick="readNotify('{{$notification->id}}')" href="{{route('reporterRequest.list')}}">
+                                                @endif
+                                                <div class="user-img"> <img src="{{asset('upload/images/users/thumb_image/'.$notification->user->image)}}" alt="user" class="img-circle"></div>
+                                                <div class="mail-contnet">
+                                                    <h5>{{$notification->user->username}}</h5> <span class="mail-desc"><strong>{{$notification->notify}} </strong> </span> <span class="time">{{$notification->created_at->diffForHumans()}}</span>
+                                                </div>
+                                            </a>
+                                        @endif
+
+                                    @endforeach
+                                </div>
+                            </li>
+                            @if(count($notifications)>6)
+                            <li>
+                                <a class="nav-link text-center link" href="{{route('notifications')}}"> <strong>See all </strong> <i class="fa fa-angle-right"></i> </a>
+                            </li>
+                            @endif
+                        </ul>
+                    </div>
+                    @endif
+                </li>
+                <!-- ============================================================== --> 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" id="2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="icon-note"></i>
                         <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
                     </a>
                     <div class="dropdown-menu mailbox dropdown-menu-right animated bounceInDown" aria-labelledby="2">
                         <ul>
-                            <li>
-                                <div class="drop-title">You have 4 new messages</div>
-                            </li>
+                            
                             <li>
                                 <div class="message-center">
                                     <!-- Message -->

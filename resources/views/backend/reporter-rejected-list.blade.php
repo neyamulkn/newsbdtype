@@ -57,6 +57,7 @@
                                         <tbody>
                                             <?php $i=1;?>
                                             @foreach($get_reporter as $show_reporter)
+                                            @if($show_reporter->user)
                                             <tr id="item{{$show_reporter->id}}">
                                                  <td><img src="{{asset('upload/images/users/thumb_image/'. $show_reporter->user->image)}}" width="50" height="50"></td>
                                                 
@@ -79,6 +80,7 @@
                                                     <a href="{{ route('reporter.edit', $show_reporter->user_id)}}" class="btn btn-info btn-sm"><i class="ti-pencil" aria-hidden="true"></i></a>
                                                    
                                             </tr>
+                                            @endif
                                             @endforeach
                                         </tbody>
                                     </table>

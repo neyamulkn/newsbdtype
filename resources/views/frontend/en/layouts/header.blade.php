@@ -1,4 +1,23 @@
-
+<style type="text/css">
+    .notification{border-bottom: 1px solid #eae6e6;}
+    .navbar .dropdown-menu{
+        right: 0;
+        left: initial;
+    }
+    .notification img{
+        width: 40px;
+        height: 40px;
+        padding-right: 5px;
+    }
+    .notification p{padding-left: 42px;margin-top: -10px;}
+    .notify{border-radius: 50%;
+background: #f14133;
+position: absolute;
+top: -4px;
+right: -6px;
+padding: 0px 2px;
+color: white;}
+</style>
 <!-- Header
     ================================================== -->
 <header class="clearfix second-style"><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -48,19 +67,29 @@
                             @guest
                             <li><a class="" href="{{route('login')}}"><i class="fa fa-lock" aria-hidden="true"></i> Login</a></li>
                             @else
-                           
+                           <?php $notifications = App\Models\Notification::where('toUser', Auth::id())->orderBy('id', 'desc')->get(); ?>
                             <li class="dropdown">
-                                <button class="profileBtn dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-bell-o"></i>
-                                <span  class="caret"></span></button>
-                               <!--  <ul class="dropdown-menu">
-                                    <li><a href="{{route('user_profile', Auth::user()->username)}}"><i class="fa fa-user-o" aria-hidden="true"></i> My Profile</a></li>
-                                    <li><a href="#"><i class="fa fa-envelope-o"></i> Inbox</a></li>
-                                    <li><a href="#"><i class="fa fa-book" aria-hidden="true"></i> Read Later</a></li>
-                                    <li><a href="#"><i class="fa fa-external-link" aria-hidden="true"></i> Forum</a></li>
-                                    <li><a href="#"><i class="fa fa-cog"></i> Setting</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="#"> Show All </a></li>
-                                </ul> -->
+                                <button class="profileBtn dropdown-toggle" type="button" data-toggle="dropdown"><i style="position: relative;" class="fa fa-bell-o"><span class="notify">{{count($notifications->where('read', 0))}}</span></i>
+                                <span class="caret"></span></button>
+                                @if(count($notifications)>0)
+                                <ul class="dropdown-menu">
+                                    
+                                    @foreach($notifications->take(7) as $notification)
+                                        @if($notification->type == env('COMMENT'))
+                                            <li class="notification">
+                                                <a onclick="readNotify('{{$notification->id}}')" href="{{route('comments',$notification->comment->news->news_slug)}}#singleComment{{$notification->item_id}}">
+                                                <img src="{{asset('upload/images/users/thumb_image/'.$notification->user->image)}}"><strong>{{$notification->user->username}} </strong>- {{$notification->notify}}
+                                                <p style="color: #969696"><i class="fa fa-clock-o"> </i> {{$notification->created_at->diffForHumans()}}</p>
+                                                <p>{{str_limit($notification->comment->comments, 20)}}</p>
+                                                </a>
+                                            </li> 
+                                        @endif
+                                    @endforeach
+                                    @if(count($notifications)>6)
+                                    <li><a href="{{route('notifications')}}"> Show All </a></li>
+                                    @endif
+                                </ul>
+                                @endif
                             </li>
                             <li class="dropdown">
                                 <button class="profileBtn dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-user"></i>

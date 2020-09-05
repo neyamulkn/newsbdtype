@@ -156,5 +156,21 @@
 	    });
 	</script>
 	@yield('js')
+
+	@if(Auth::check()) 
+	<script>
+
+	  	function readNotify(id){
+			
+			var url = "{{route('readNotify', ':id')}}";
+			url = url.replace(":id", id);
+			$.ajax({
+	            url:url,
+	            method:"get",
+		    });
+		}
+
+	</script>
+	@endif
 </body>
 </html>

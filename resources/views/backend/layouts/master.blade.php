@@ -14,7 +14,7 @@
     @include('backend.layouts.partials.css')
 </head>
 
-<body class="wp-menu skin-green fixed-layout" >
+<body class="skin-green fixed-layout" >
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->

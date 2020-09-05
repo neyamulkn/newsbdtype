@@ -1,8 +1,26 @@
-
+<style type="text/css">
+    .notification{border-bottom: 1px solid #eae6e6;}
+    .navbar .dropdown-menu{
+        right: 0;
+        left: initial;
+    }
+    .notification img{
+        width: 40px;
+        height: 40px;
+        padding-right: 5px;
+    }
+    .notification p{padding-left: 42px;margin-top: -10px;}
+    .notify{border-radius: 50%;
+background: #f14133;
+position: absolute;
+top: -4px;
+right: -6px;
+padding: 0px 2px;
+color: white;}
+</style>
 <!-- Header
     ================================================== -->
-<header class="clearfix second-style"><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-
+<header class="clearfix second-style">
     <!-- Bootstrap navbar -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
 
@@ -49,19 +67,51 @@
                             @guest
                             <li><a class="" href="{{route('login')}}"><i class="fa fa-lock" aria-hidden="true"></i> Login</a></li>
                             @else
-                           
+                           <?php $notifications = App\Models\Notification::where('toUser', Auth::id())->orderBy('id', 'desc')->get(); ?>
                             <li class="dropdown">
-                                <button class="profileBtn dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-bell-o"></i>
+                                <button class="profileBtn dropdown-toggle" type="button" data-toggle="dropdown"><i style="position: relative;" class="fa fa-bell-o"><span class="notify">{{count($notifications->where('read', 0))}}</span></i>
                                 <span class="caret"></span></button>
-                               <!--  <ul class="dropdown-menu">
-                                    <li><a href="{{route('user_profile', Auth::user()->username)}}"><i class="fa fa-user-o" aria-hidden="true"></i> My Profile</a></li>
-                                    <li><a href="#"><i class="fa fa-envelope-o"></i> Inbox</a></li>
-                                    <li><a href="#"><i class="fa fa-book" aria-hidden="true"></i> Read Later</a></li>
-                                    <li><a href="#"><i class="fa fa-external-link" aria-hidden="true"></i> Forum</a></li>
-                                    <li><a href="#"><i class="fa fa-cog"></i> Setting</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="#"> Show All </a></li>
-                                </ul> -->
+                                <ul class="dropdown-menu">
+                                    
+                                    @foreach($notifications->take(7) as $notification)
+                                        @if($notification->type == env('NEWS'))
+                                            <li class="notification">
+                                                <a onclick="readNotify('{{$notification->id}}')" @if($notification->news->status == 1) href="{{route('news.list')}}" @elseif($notification->news->status == 2) href="{{route('news.draft')}}" @else  href="{{route('news.pending')}}" @endif>
+                                                <img src="{{asset('upload/images/users/thumb_image/'.$notification->user->image)}}"><strong>{{$notification->user->username}} </strong>- {{$notification->notify}}
+                                                <p style="color: #969696"><i class="fa fa-clock-o"> </i> {{$notification->created_at->diffForHumans()}}</p>
+                                                <p>{{str_limit($notification->news->news_title, 20)}}</p>
+                                                </a>
+                                            </li> 
+                                        @endif
+
+                                        @if($notification->type == env('COMMENT'))
+                                            <li class="notification">
+                                                <a onclick="readNotify('{{$notification->id}}')" href="{{route('comments',$notification->comment->news->news_slug)}}#singleComment{{$notification->item_id}}">
+                                                <img src="{{asset('upload/images/users/thumb_image/'.$notification->user->image)}}"><strong>{{$notification->user->username}} </strong>- {{$notification->notify}}
+                                                <p style="color: #969696"><i class="fa fa-clock-o"> </i> {{$notification->created_at->diffForHumans()}}</p>
+                                                <p>{{str_limit($notification->comment->comments, 20)}}</p>
+                                                </a>
+                                            </li> 
+                                        @endif
+                                        @if($notification->type == env('REPORTER_NOTIFY'))
+                                            <li class="notification">
+                                                @if(Auth::user()->role_id != env('ADMIN'))
+                                                <a onclick="readNotify('{{$notification->id}}')" href="{{route('user_profile', $notification->user->username)}}">
+                                                @endif
+                                                @if(Auth::user()->role_id == env('ADMIN'))
+                                                <a onclick="readNotify('{{$notification->id}}')" href="{{route('reporterRequest.list')}}">
+                                                @endif
+                                                <img src="{{asset('upload/images/users/thumb_image/'.$notification->user->image)}}"><strong>{{$notification->user->username}} </strong>- {{$notification->notify}}
+                                                <p style="color: #969696"><i class="fa fa-clock-o"> </i> {{$notification->created_at->diffForHumans()}}</p>
+                                               
+                                                </a>
+                                            </li> 
+                                        @endif
+                                    @endforeach
+                                    @if(count($notifications)>6)
+                                    <li><a href="{{route('notifications')}}"> Show All </a></li>
+                                    @endif
+                                </ul>
                             </li>
                             <li class="dropdown">
                                 <button class="profileBtn dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-user"></i>
